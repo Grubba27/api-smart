@@ -7,7 +7,6 @@ import { Model } from 'mongoose';
 
 @Injectable()
 export class JogadoresService {
-
   constructor(
     @InjectModel('Jogador') private readonly jogadorModel: Model<Jogador>,
   ) {}
@@ -51,7 +50,7 @@ export class JogadoresService {
   }
 
   async deletarJogador(email: string) {
-    return await this.jogadorModel.remove({ email: email }).exec();
+    return await this.jogadorModel.deleteOne({ email: email }).exec();
   }
 
   async verificarJogador(email: string) {
