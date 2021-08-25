@@ -13,6 +13,7 @@ import {
 import { CriarJogadorDto } from './dtos/criar-jogador.dto';
 import { JogadoresService } from './jogadores.service';
 import { JogadoresValidacaoParametrosPipe } from './pipe/jogadores-validacao-parametros.pipe';
+import { AtualizarJogadorDto } from "./dtos/atualizar-jogador.dto";
 
 @Controller('api/v1/jogadores')
 export class JogadoresController {
@@ -28,7 +29,7 @@ export class JogadoresController {
   @UsePipes(ValidationPipe)
   async AtualizarJogador(
     @Param('_id', JogadoresValidacaoParametrosPipe) _id: string,
-    @Body() jogador: CriarJogadorDto,
+    @Body() jogador: AtualizarJogadorDto,
   ) {
     return await this.jogadoresService.atualizarJogador(jogador, _id);
   }

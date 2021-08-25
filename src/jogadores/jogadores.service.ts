@@ -8,6 +8,7 @@ import { Jogador } from './interfaces/jogador.interface';
 
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { AtualizarJogadorDto } from "./dtos/atualizar-jogador.dto";
 
 @Injectable()
 export class JogadoresService {
@@ -15,7 +16,7 @@ export class JogadoresService {
     @InjectModel('Jogador') private readonly jogadorModel: Model<Jogador>,
   ) {}
 
-  async atualizarJogador(jogadorDto: CriarJogadorDto, _id: string) {
+  async atualizarJogador(jogadorDto: AtualizarJogadorDto, _id: string) {
     const jogadorEncontrado = await this.verificarJogador(_id);
     if (jogadorEncontrado) {
       await this.atualizar(jogadorEncontrado, jogadorDto);
@@ -47,7 +48,7 @@ export class JogadoresService {
 
   private async atualizar(
     jogadorEncontrado: Jogador,
-    jogadorDto: CriarJogadorDto,
+    jogadorDto: AtualizarJogadorDto,
   ) {
     return await this.jogadorModel
       .findOneAndUpdate({ id: jogadorEncontrado.id }, { $set: jogadorDto })
