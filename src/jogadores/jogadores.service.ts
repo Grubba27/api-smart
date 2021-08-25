@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CriarJogadorDto } from './dtos/criar-jogador.dto';
 import { Jogador } from './interfaces/jogador.interface';
 
@@ -10,10 +14,27 @@ export class JogadoresService {
   constructor(
     @InjectModel('Jogador') private readonly jogadorModel: Model<Jogador>,
   ) {}
-  async criarAtualizarJogador(jogadorDto: CriarJogadorDto) {
-    const jogadorEncontrado = await this.verificarJogador(jogadorDto.email);
+
+  async atualizarJogador(jogadorDto: CriarJogadorDto, _id: string) {
+    const jogadorEncontrado = await this.verificarJogador(_id);
     if (jogadorEncontrado) {
       await this.atualizar(jogadorEncontrado, jogadorDto);
+    } else {
+      throw new BadRequestException(
+        `Jogador com o ${_id} não encontrado`
+      )
+    }
+  }
+
+  async criarJogador(jogadorDto: CriarJogadorDto) {
+    const jogadorEncontrado = await this.verificarJogador(
+      jogadorDto.email,
+      'email',
+    );
+    if (jogadorEncontrado) {
+      throw new BadRequestException(
+        `Jogador com o ${jogadorDto.email} já existe`,
+      );
     } else {
       await this.criar(jogadorDto);
     }
@@ -29,10 +50,7 @@ export class JogadoresService {
     jogadorDto: CriarJogadorDto,
   ) {
     return await this.jogadorModel
-      .findOneAndUpdate(
-        { email: jogadorEncontrado.email },
-        { $set: jogadorDto },
-      )
+      .findOneAndUpdate({ id: jogadorEncontrado.id }, { $set: jogadorDto })
       .exec();
   }
 
@@ -40,20 +58,30 @@ export class JogadoresService {
     return await this.jogadorModel.find().exec();
   }
 
-  async consultarJogador(email: string) {
-    const res = await this.verificarJogador(email);
+  async consultarJogador(id: string) {
+    const res = await this.verificarJogador(id);
     if (res) {
       return res;
     } else {
-      throw new NotFoundException(`Jogador de ${email} não cadastrado`);
+      throw new NotFoundException(`Jogador de ${id} não cadastrado`);
     }
   }
 
-  async deletarJogador(email: string) {
-    return await this.jogadorModel.deleteOne({ email: email }).exec();
+  async deletarJogador(_id: string) {
+    const jogadorVerificado = this.verificarJogador(_id);
+    if (jogadorVerificado) {
+      return await this.jogadorModel.deleteOne({ id: _id }).exec();
+    } else {
+      throw new NotFoundException(`Jogador de ${_id} não cadastrado`);
+    }
   }
 
-  async verificarJogador(email: string) {
-    return this.jogadorModel.findOne({ email: email }).exec();
+  async verificarJogador(filter: string, _param = 'id') {
+    switch (_param) {
+      case 'id':
+        return this.jogadorModel.findOne({ id: filter }).exec();
+      default:
+        return this.jogadorModel.findOne({ email: filter }).exec();
+    }
   }
 }
