@@ -7,7 +7,7 @@ import { CategoriaInterface } from './interfaces/categoria.interface';
 @Injectable()
 export class CategoriasService {
   constructor(
-    @InjectModel('categoria') private categoriaModel: Model<CategoriaInterface>,
+    @InjectModel('Categoria') private categoriaModel: Model<CategoriaInterface>,
   ) {}
 
   async criarCategoria(criarCategoriaDto: CriarCategoriaDto) {

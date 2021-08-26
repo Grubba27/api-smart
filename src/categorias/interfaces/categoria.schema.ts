@@ -14,5 +14,5 @@ export const CategoriaSchema = new Mongoose.Schema(
     ],
     jogadores: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Jogador' }],
   },
-  { timestamps: true, collection: 'categorias' },
+  { timestamps: true, collection: 'Categorias' },
 );
