@@ -40,7 +40,7 @@ export class JogadoresController {
   }
 
   @Get('/:_id')
-  async consultarJogadorPorid(@Param('_id') _id: string) {
+  async consultarJogadorPorId(@Param('_id') _id: string) {
     return this.jogadoresService.consultarJogador(_id);
   }
 
