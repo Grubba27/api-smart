@@ -36,7 +36,7 @@ export class CategoriasService {
       }
     } else {
       throw new BadRequestException(
-        `cat ${criarCategoriaDto.categoria}  não existe`,
+        `cat ${criarCategoriaDto.categoria} não existe`,
       );
     }
   }
