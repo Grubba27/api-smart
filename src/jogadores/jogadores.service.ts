@@ -8,7 +8,7 @@ import { Jogador } from './interfaces/jogador.interface';
 
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { AtualizarJogadorDto } from "./dtos/atualizar-jogador.dto";
+import { AtualizarJogadorDto } from './dtos/atualizar-jogador.dto';
 
 @Injectable()
 export class JogadoresService {
@@ -21,9 +21,7 @@ export class JogadoresService {
     if (jogadorEncontrado) {
       await this.atualizar(jogadorEncontrado, jogadorDto);
     } else {
-      throw new BadRequestException(
-        `Jogador com o ${_id} não encontrado`
-      )
+      throw new BadRequestException(`Jogador com o ${_id} não encontrado`);
     }
   }
 
