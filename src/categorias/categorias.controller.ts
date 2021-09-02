@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Post,
@@ -40,5 +41,10 @@ export class CategoriasController {
   @UsePipes(ValidationPipe)
   async consultarCategoriaPorId(@Param('_id') _id: string) {
     return this.categoriasService.consultarCategoriaEspecifica(_id);
+  }
+
+  @Delete('/:_id')
+  async deletarCategoria(@Param('_id') _id: string) {
+    await this.categoriasService.deletarCategoria(_id);
   }
 }

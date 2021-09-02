@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CriarCategoriaDto } from './dtos/criar-categoria.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -48,6 +52,7 @@ export class CategoriasService {
   async consultarCategoriaEspecifica(_id: string) {
     return await this.verificarCategoria(_id, 'id');
   }
+
   async verificarCategoria(
     criarCategoriaDto: CriarCategoriaDto | any,
     _param = 'cat',
@@ -64,6 +69,15 @@ export class CategoriasService {
           .exec();
       default:
         return new BadRequestException(`${_param} não é parametro valido`);
+    }
+  }
+
+  async deletarCategoria(_id: string) {
+    const categoriaEncontrada = await this.verificarCategoria(_id, 'id');
+    if (categoriaEncontrada) {
+      return await this.categoriaModel.deleteOne({ id: _id }).exec();
+    } else {
+      throw new NotFoundException(`${_id} não existe em categorias `);
     }
   }
 }
