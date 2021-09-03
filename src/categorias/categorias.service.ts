@@ -7,6 +7,7 @@ import { CriarCategoriaDto } from './dtos/criar-categoria.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CategoriaInterface } from './interfaces/categoria.interface';
+import { AtualizarCategoriaDto } from './dtos/atualizar-categoria.dto';
 
 @Injectable()
 export class CategoriasService {
@@ -25,22 +26,22 @@ export class CategoriasService {
     }
   }
 
-  async atualizarCategoria(criarCategoriaDto: CriarCategoriaDto) {
+  async atualizarCategoria(atualizarCategoriaDto: AtualizarCategoriaDto) {
     const categoriaEncontrada = await this.verificarCategoria(
-      criarCategoriaDto,
+      atualizarCategoriaDto,
     );
     if (categoriaEncontrada) {
       if (!(categoriaEncontrada instanceof BadRequestException)) {
         await this.categoriaModel
           .findOneAndUpdate(
             { id: categoriaEncontrada.id },
-            { $set: criarCategoriaDto },
+            { $set: atualizarCategoriaDto },
           )
           .exec();
       }
     } else {
       throw new BadRequestException(
-        `cat ${criarCategoriaDto.categoria} não existe`,
+        `cat ${atualizarCategoriaDto.descricao} não existe`,
       );
     }
   }
